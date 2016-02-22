@@ -23,43 +23,50 @@ DEALINGS WITH THE SOFTWARE.
 
 import numpy as np
 
-from PIL import Image
+
 from Sphere import Sphere
-from Ray import Ray
 from Material import Material
 from Light import Light
-from ViewPort import ViewPort
-from PhongShaders import phongShader
 
-#create a viewport and image
-v = ViewPort(500,500)
-im = Image.new("RGB",(v.w,v.h))
-pix = im.load()
+from Camera import PerspectiveCamera
 
 #set an eyepoint
 eye = np.array([0,0,0])
+
+#set a lookat point
+lookat = np.array([0,0,-1])
+
+#set the up vector for viewing
+up = np.array([0,1,0])
+
+#set up distance to view plane
+
+d = 8.0
+
+# create a holder for our geometric objects
+world=[]
 
 #define a sphere and material
 mat = Material(np.array([255,0,0]),np.array([255,0,0]),120.0)
 radius = 1.0
 center = np.array([0,0, -2.5])
 s = Sphere(radius,center,mat)
+world.append(s)
 
-#define a ray
-ray = Ray(np.array([0,0,0]),np.array([0,0,-1]))
+#create a holder for lights
+lights = []
 
 # define a directional light 
-light = Light(None,np.array([0,1,1]), np.array([0.75,0,0]), np.array([0.75,0,0])    )
+light1 = Light(None,np.array([0,1,1]), np.array([0.75,0,0]), np.array([0.75,0,0]))
+lights.append(light1)
 
-# Perform orthographic ray-tracing of the sphere
+# create a camera to render the scene
+cam = PerspectiveCamera(eye,lookat,up,d,zoom,exposure=1.0)
 
-for col in range(v.w):
-    for row in range(v.h):
-            ray.o = v.getPixelCenter(col,row)
-            t = s.intersectRay(ray)
-            if (t != None):
-                xp = ray.getPoint(t) 
-                pix[col,(v.h-1)-row] = phongShader(xp,s.getNormal(xp),s.material,light,eye)
+#render the scene
+
+cam.render_scene(world,lights)
+
 
 # Show the image in a window
                 
