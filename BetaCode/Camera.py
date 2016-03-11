@@ -54,6 +54,12 @@ class PerspectiveCamera:
 
         # Show the image in a window
         im.show()
+    
+    def ray_direction(self,p):
+        ray = (p[0]*self.u) + (p[1]*self.v) - (self.d*self.w)
+        ray = ray/LA.norm(ray)
+        return ray
+        
         
 class OrthoCamera:  
     """Simple orthograohic camera"""
