@@ -36,13 +36,15 @@ class PerspectiveCamera:
         pix = im.load()
 
         #define a ray
+        #FIX BUG -- STILL ORTHO
         ray = Ray(np.array([0,0,0]),np.array([0,0,-1]))
 
         # Perform perspective ray-tracing
-
+        print("...generating "+str(v)+" image")
         for col in range(v.w):
             for row in range(v.h):
                 color = np.zeros(3)
+                print(color)
                 ray.o = v.getPixelCenter(col,row)
                 for s in objects:
                     t = s.intersectRay(ray)
@@ -50,8 +52,9 @@ class PerspectiveCamera:
                         xp = ray.getPoint(t)
                         for light in lights:
                             color+= phongShader(xp,s.getNormal(xp),s.material,light,self.eye)
-                        pix[col,(v.h-1)-row] = color
-
+                            print(color)
+                        #pix[col,v.h-1-row] = color
+                        pix[col,v.h-1-row]=(1,1,1)   
         # Show the image in a window
         im.show()
     

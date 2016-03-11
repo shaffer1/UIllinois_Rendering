@@ -46,6 +46,10 @@ d = 8.0
 # create a holder for our geometric objects
 world=[]
 
+# Set camera parameters
+zoom=1.0
+res = (500,400)
+
 #define a sphere and material
 mat = Material(np.array([255,0,0]),np.array([255,0,0]),120.0)
 radius = 1.0
@@ -64,10 +68,6 @@ lights.append(light1)
 cam = PerspectiveCamera(eye,lookat,up,d,zoom,exposure=1.0)
 
 #render the scene
+print("Starting Render")
+cam.render_scene(world,lights,res)
 
-cam.render_scene(world,lights)
-
-
-# Show the image in a window
-                
-im.show()
